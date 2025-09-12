@@ -14,6 +14,9 @@ class RigManager:
         with open(self.config_path, 'r') as file:
             self.config_dict = json.load(file)
 
+    def launch(self):
+        print('Launching the rig...')
+
     def set_ncores(self, n):
         all_cores = self._prepare_core_list()
         cores_to_use = sorted(random.sample(all_cores, n))
@@ -24,6 +27,9 @@ class RigManager:
                 json.dump(self.config_dict, file)
         except OSError as e:
             print(e)
+
+    def stop(self):
+        print('Stopping the rig...')
 
     def _prepare_core_list(self) -> list[int]:
         return self.config_dict['cpu']['rx/wow']

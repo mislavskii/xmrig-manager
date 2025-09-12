@@ -7,7 +7,8 @@ manager = rm.RigManager(
 COMMANDS = {
     'L': manager.launch,
     'N': lambda: manager.set_ncores(n=int(input('Enter desired number of cores to use: '))),
-    'S': manager.stop
+    'S': manager.stop,
+    'T': manager.get_stats
 }
 
 
@@ -17,6 +18,7 @@ def main():
             'Enter command:' \
             '\nL - [L]aunch the rig' \
             '\nN - Adjust the [N]umber of active cores' \
+            '\nT - View mining s[T]ats' \
             '\nS - [S]top the rig' \
             '\n>>> '
         )

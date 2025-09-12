@@ -1,8 +1,10 @@
 import json
+from pprint import pprint
 import random
 from pathlib import Path
 import signal
 import subprocess
+import requests as rq
 
 from dotenv import load_dotenv
 import os
@@ -11,6 +13,7 @@ load_dotenv()
 
 
 class RigManager:
+    STAT_URL = f'https://api.moneroocean.stream/miner/{os.getenv('WALLET')}/stats'
 
     def __init__(self, working_dir=''):
         self.working_dir = Path(working_dir if working_dir else os.getenv('DEFAULT_DIR', ''))
@@ -36,6 +39,10 @@ class RigManager:
                 json.dump(self.config_dict, file)
         except OSError as e:
             print(e)
+
+    def get_stats(self):
+        resp = rq.get(self.STAT_URL, timeout=30)
+        pprint(resp.json())
 
     def stop(self):
         print('Stopping the rig...')

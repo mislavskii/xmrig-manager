@@ -13,7 +13,7 @@ load_dotenv()
 
 
 class RigManager:
-    STAT_URL = f'https://api.moneroocean.stream/miner/{os.getenv('WALLET')}/stats'
+    STAT_URL = f'https://api.moneroocean.stream/miner/{os.getenv("WALLET")}/stats'
 
     def __init__(self, working_dir=''):
         self.working_dir = Path(working_dir if working_dir else os.getenv('DEFAULT_DIR', ''))
@@ -24,13 +24,22 @@ class RigManager:
     def launch(self):
         print('Launching the rig...')
         rig_path = self.working_dir / "xmrig"
-        self.xmrig_process = subprocess.Popen([
-            "gnome-terminal", "--",
-            rig_path
-        ])
+        try:
+            self.xmrig_process = subprocess.Popen([
+                "gnome-terminal", "--",
+                rig_path
+            ])
+        except Exception as e:
+            print(e)
 
     def set_ncores(self, n):
         all_cores = self._prepare_core_list()
+        if n > len(all_cores):
+            n = len(all_cores)
+            print('Desired number of cores exceeds available. Set to max available.')
+        if n < 1:
+            n = 1
+            print('Invalid value below min. Set to 1')
         cores_to_use = sorted(random.sample(all_cores, n))
         print(cores_to_use)
         self.config_dict['cpu']['rx'] = cores_to_use

@@ -1,7 +1,7 @@
 import rig_manager as rm
 
 manager = rm.RigManager(
-        config_path=input('Enter path to the rig config file: ')
+        working_dir=input('Enter path to the rig directory: ')
     )
 
 COMMANDS = {

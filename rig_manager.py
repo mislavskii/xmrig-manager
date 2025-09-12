@@ -1,5 +1,8 @@
 import json
 import random
+from pathlib import Path
+import signal
+import subprocess
 
 from dotenv import load_dotenv
 import os
@@ -9,13 +12,19 @@ load_dotenv()
 
 class RigManager:
 
-    def __init__(self, config_path=''):
-        self.config_path = config_path if config_path else os.getenv('DEFAULT_CONFIG_PATH', '')
+    def __init__(self, working_dir=''):
+        self.working_dir = Path(working_dir if working_dir else os.getenv('DEFAULT_DIR', ''))
+        self.config_path = self.working_dir / 'config.json'
         with open(self.config_path, 'r') as file:
             self.config_dict = json.load(file)
 
     def launch(self):
         print('Launching the rig...')
+        rig_path = self.working_dir / "xmrig"
+        self.xmrig_process = subprocess.Popen([
+            "gnome-terminal", "--",
+            rig_path
+        ])
 
     def set_ncores(self, n):
         all_cores = self._prepare_core_list()
@@ -30,11 +39,7 @@ class RigManager:
 
     def stop(self):
         print('Stopping the rig...')
+        subprocess.run(["pkill", "-2", "xmrig"])
 
     def _prepare_core_list(self) -> list[int]:
         return self.config_dict['cpu']['rx/wow']
-    
-
-if __name__ == '__main__':
-    mgr = RigManager()
-    mgr.set_ncores(6)

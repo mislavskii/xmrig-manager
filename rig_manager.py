@@ -6,7 +6,7 @@ import signal
 import subprocess
 import requests as rq
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
 import os
 
 load_dotenv()
@@ -16,7 +16,11 @@ class RigManager:
     STAT_URL = f'https://api.moneroocean.stream/miner/{os.getenv("WALLET")}/stats'
 
     def __init__(self, working_dir=''):
-        self.working_dir = Path(working_dir if working_dir else os.getenv('DEFAULT_DIR', ''))
+        if working_dir:
+            set_key('.env', 'DEFAULT_DIR', working_dir)
+            self.working_dir = Path(working_dir)
+        else:
+            self.working_dir = Path(os.getenv('DEFAULT_DIR', ''))
         self.config_path = self.working_dir / 'config.json'
         with open(self.config_path, 'r') as file:
             self.config_dict = json.load(file)

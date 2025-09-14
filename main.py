@@ -1,7 +1,7 @@
 import rig_manager as rm
 
 manager = rm.RigManager(
-        working_dir=input('Enter path to the rig directory: ')
+        working_dir=input('Enter path to the rig directory, bare Enter to reuse from previous session: ')
     )
 
 COMMANDS = {
@@ -15,7 +15,7 @@ COMMANDS = {
 def main():
     while True:
         command = input(
-            'Enter command:' \
+            'Enter command, bare Enter to quit:' \
             '\nL - [L]aunch the rig' \
             '\nN - Adjust the [N]umber of active cores' \
             '\nT - View mining s[T]ats' \

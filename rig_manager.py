@@ -15,11 +15,12 @@ load_dotenv()
 class RigManager:
 
     def __init__(self, working_dir=''):
-        if working_dir:
+        if working_dir and Path(working_dir).exists():
             set_key('.env', 'DEFAULT_DIR', working_dir)
             self.working_dir = Path(working_dir)
         else:
             self.working_dir = Path(os.getenv('DEFAULT_DIR', ''))
+            print(f'No valid new dir provided. Defaulting to "{self.working_dir}"')
         self.config_path = self.working_dir / 'config.json'
         with open(self.config_path, 'r') as file:  # TODO: rewrite with Path?
             self.config_dict = json.load(file)

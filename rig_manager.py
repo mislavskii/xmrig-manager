@@ -49,7 +49,7 @@ class RigManager:
         self.config_dict['cpu']['rx'] = cores_to_use
         try:
             with open(self.config_path, 'w') as file:
-                json.dump(self.config_dict, file)
+                json.dump(self.config_dict, file, indent=2)
         except OSError as e:
             print(e)
 

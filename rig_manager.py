@@ -13,7 +13,6 @@ load_dotenv()
 
 
 class RigManager:
-    STAT_URL = f'https://api.moneroocean.stream/miner/{os.getenv("WALLET")}/stats'
 
     def __init__(self, working_dir=''):
         if working_dir:
@@ -22,8 +21,9 @@ class RigManager:
         else:
             self.working_dir = Path(os.getenv('DEFAULT_DIR', ''))
         self.config_path = self.working_dir / 'config.json'
-        with open(self.config_path, 'r') as file:
+        with open(self.config_path, 'r') as file:  # TODO: rewrite with Path?
             self.config_dict = json.load(file)
+        self.wallets = [pool['user'] for pool in self.config_dict['pools']]
 
     def launch(self):
         print('Launching the rig...')
@@ -54,8 +54,11 @@ class RigManager:
             print(e)
 
     def get_stats(self):
-        resp = rq.get(self.STAT_URL, timeout=30)
-        pprint(resp.json())
+        for wallet in self.wallets:
+            print(f'Getting stats for {wallet}...')
+            stat_url = f'https://api.moneroocean.stream/miner/{wallet}/stats'
+            resp = rq.get(stat_url, timeout=30)
+            pprint(resp.json())
 
     def stop(self):
         print('Stopping the rig...')

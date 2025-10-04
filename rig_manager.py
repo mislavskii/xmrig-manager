@@ -20,7 +20,7 @@ class RigManager:
             self.working_dir = Path(working_dir)
         else:
             self.working_dir = Path(os.getenv('DEFAULT_DIR', ''))
-            print(f'No valid new dir provided. Defaulting to "{self.working_dir}"')
+            print(f'No valid new dir provided.')
         self.config_path = self.working_dir / 'config.json'
         with open(self.config_path, 'r') as file:
             self.config_dict = json.load(file)

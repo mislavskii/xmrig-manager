@@ -1,7 +1,8 @@
 import rig_manager as rm
 
+cwd = rm.os.getenv('DEFAULT_DIR')
 manager = rm.RigManager(
-        working_dir=input('Enter path to the rig directory, bare Enter to reuse from previous session: ')
+        working_dir=input(f'Enter path to the rig directory, bare Enter to keep using {cwd}: ')
     )
 
 COMMANDS = {
@@ -13,6 +14,8 @@ COMMANDS = {
 
 
 def main():
+    print(f'Current xmrig directory is {manager.get_cwd()}')
+    print(f'Currently selected cores to mine on: {manager.get_cores()}')
     while True:
         command = input(
             'Enter command, bare Enter to quit:' \

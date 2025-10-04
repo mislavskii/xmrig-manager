@@ -22,7 +22,7 @@ class RigManager:
             self.working_dir = Path(os.getenv('DEFAULT_DIR', ''))
             print(f'No valid new dir provided. Defaulting to "{self.working_dir}"')
         self.config_path = self.working_dir / 'config.json'
-        with open(self.config_path, 'r') as file:  # TODO: rewrite with Path?
+        with open(self.config_path, 'r') as file:
             self.config_dict = json.load(file)
         self.wallets = [pool['user'] for pool in self.config_dict['pools']]
 
@@ -61,6 +61,12 @@ class RigManager:
             resp = rq.get(stat_url, timeout=30)
             pprint(resp.json())
 
+    def get_cwd(self):
+        return os.getenv('DEFAULT_DIR', '')  # TODO: test
+    
+    def get_cores(self):  # TODO: test
+        return self.config_dict['cpu']['rx']
+    
     def stop(self):
         print('Stopping the rig...')
         subprocess.run(["pkill", "-2", "xmrig"])
